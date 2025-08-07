@@ -32,17 +32,22 @@ class Player(Paddle):
   def get_direction(self):
     keys = pygame.key.get_pressed()
     self.direction = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
+    # Debug print
+    if self.direction != 0:
+      print(f"Player1 direction: {self.direction}")
 
 class Player2(Paddle):
-  def __init__(self, groups, ball):
+  def __init__(self, groups):
     super().__init__(groups)
     self.speed = SPEED['player2']
     self.rect.center = POS['player2']
-    self.ball = ball
 
   def get_direction(self):
     keys = pygame.key.get_pressed()
     self.direction = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
+    # Debug print
+    if self.direction != 0:
+      print(f"Player2 direction: {self.direction}")
 
 
 class Ball(pygame.sprite.Sprite):
@@ -59,6 +64,11 @@ class Ball(pygame.sprite.Sprite):
     self.old_rect = self.rect.copy()
     self.direction = pygame.Vector2(choice((1,-1)), uniform(0.7,0.8) * choice((-1,1)))
 
+  def reset_ball(self, direction_towards_player):
+    """Reset ball to center, moving towards the specified player (1 or 2)"""
+    self.rect.center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
+    # Direction towards player: 1 = right (player1), -1 = left (player2)
+    self.direction = pygame.Vector2(direction_towards_player, uniform(0.7,0.8) * choice((-1,1)))
 
   def move(self, dt):
     self.rect.x += self.direction.x * SPEED['ball'] * dt
@@ -85,6 +95,9 @@ class Ball(pygame.sprite.Sprite):
             self.direction.y *= -1
 
   def wall_collision(self):
+    # Return which player scored (1 or 2) or None if no score
+    scored = None
+    
     if self.rect.top <= 0:
       self.rect.top = 0
       self.direction.y *= -1
@@ -94,14 +107,14 @@ class Ball(pygame.sprite.Sprite):
       self.direction.y *= -1
 
     if self.rect.right >= WINDOW_WIDTH:
-      self.rect.right = WINDOW_WIDTH
-      self.direction.x *= -1
+      scored = 2  # Player2 scored (ball went past right side)
 
     if self.rect.left <= 0:
-      self.rect.left = 0
-      self.direction.x *= -1
+      scored = 1  # Player1 scored (ball went past left side)
+
+    return scored
 
   def update(self, dt):
     self.old_rect = self.rect.copy()
     self.move(dt)
-    self.wall_collision()
+    return self.wall_collision()
