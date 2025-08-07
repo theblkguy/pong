@@ -40,9 +40,9 @@ class Player2(Paddle):
     self.rect.center = POS['player2']
     self.ball = ball
 
-
   def get_direction(self):
-    self.direction = 1 if self.ball.rect.centery > self.rect.centery else - 1
+    keys = pygame.key.get_pressed()
+    self.direction = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
 
 
 class Ball(pygame.sprite.Sprite):
