@@ -6,11 +6,11 @@ SIZE = {'paddle': (40,100), 'ball': (30,30)}
 POS = { 'player': (WINDOW_WIDTH - 50, WINDOW_HEIGHT // 2), 'player2' : (50, WINDOW_HEIGHT // 2)}
 SPEED = {'player': 500,'player2': 500, 'ball': 250}
 COLORS = {
-  'paddle' : "#ee322c",
+  'paddle' : "#ee802c",
   'paddle shadow' : "#b12521",
-  'ball' : "#ee622c",
+  'ball' : "#ffffff",
   'ball shadow': "#c14f24",
-  'bg' : "#002633",
+  'bg' : "#270033",
   'center_line': "#ffffff80",  # Semi-transparent white
   'score': "#ffffff"
 }

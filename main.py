@@ -1,3 +1,4 @@
+#!/home/banj0k0/senior/pong/.venv/bin/python
 from settings import *
 from sprites import *
 
